@@ -137,6 +137,10 @@ ifeq ($(NEED_BL32),yes)
 include services/spd/opteed/opteed.mk
 endif
 
+BL32_BASE ?= 0x8f800000
+$(eval $(call add_define,BL32_BASE))
+
+
 override BL1_SOURCES =
 
 # Add the build options to pack Trusted OS Extra1 and Trusted OS Extra2 images
