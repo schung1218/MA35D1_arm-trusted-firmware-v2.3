@@ -30,6 +30,11 @@
 	status = "okay";
 };
 
+&sspcc {
+	gpio_s = <PD6_S>,
+		<PD7_S>;
+};
+
 
 
 

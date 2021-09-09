@@ -52,6 +52,10 @@ USE_DEBUGFS		:= 1
 DEBUG			:= 1
 LOG_LEVEL		:= 40
 
+# for test suite
+ENABLE_PSCI_STAT		:=	1
+ENABLE_PMF			:=	1
+
 ifeq ($(NEED_BL32),yes)
 $(eval $(call add_define,MA35D1_LOAD_BL32))
 endif
@@ -92,6 +96,7 @@ PLAT_BL_COMMON_SOURCES	:=	common/fdt_wrappers.c				\
 				plat/arm/common/arm_common.c			\
 				plat/nuvoton/ma35d1/ma35d1_common.c		\
 				plat/nuvoton/ma35d1/ma35d1_private.c		\
+				plat/nuvoton/ma35d1/ma35d1_platform.c		\
 				drivers/nuvoton/pmic/ma35d1_pmic.c		\
 #				plat/nuvoton/ma35d1/drivers/ma35d1_crypto.c	\
 #				plat/nuvoton/ma35d1/drivers/tsi_cmd.c	        \
