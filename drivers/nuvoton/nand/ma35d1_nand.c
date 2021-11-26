@@ -21,7 +21,7 @@
 
 #include <drivers/nuvoton/ma35d1_nand.h>
 
-#define SZ_128M		0x08000000U
+#define SZ_128M		128U
 
 struct ma35d1_nand_info {
 	int pages_per_block;
@@ -54,7 +54,6 @@ int ma35d1_nand_wait_ready(unsigned long delay)
 
 	timeout = timeout_init_us(delay);
 	while (!timeout_elapsed(timeout)) {
-	while (1) {
 		if ((mmio_read_32(REG_NANDINTSTS) & 0x400)) {
 			mmio_write_32(REG_NANDINTSTS, 0x400);
 			return 0;
@@ -78,7 +77,7 @@ int ma35d1_nand_reset(void)
 	mmio_write_32(REG_NANDCMD, NAND_CMD_RESET);       /* RESET command */
 
 	/* delay for NAND flash tWB time */
-	//udelay(100);
+	udelay(100);
 
 	if (ma35d1_nand_wait_ready(1))
 		return -ETIMEDOUT;
@@ -444,7 +443,7 @@ int ma35d1_nand_ctrl_init(void)
 	mmio_write_32(REG_FMI_CTL, 0x08);
 
 	/* enable CS0 */
-	mmio_write_32(REG_NANDCTL, mmio_read_32(REG_NANDCTL) & ~0x02000000);
+	mmio_write_32(REG_NANDCTL, (mmio_read_32(REG_NANDCTL) & ~0x02000000) | 0x4000000);
 
 	return 0;
 }
@@ -453,8 +452,8 @@ static void *fdt = (void *)(uintptr_t)MA35D1_DTB_BASE;
 
 static void ma35d1_nand_setup(struct ma35d1_nand_info *nand)
 {
-	unsigned int reg = 0x00910090; // REG_NANDCTL default value
-	int node;
+	unsigned int reg = 0x04910090; // REG_NANDCTL default value
+	int node, count;
 
 	ma35d1_nand_ctrl_init();
 
@@ -472,10 +471,11 @@ static void ma35d1_nand_setup(struct ma35d1_nand_info *nand)
 	nand->page_size = fdt_read_uint32_default(fdt, node, "nand-page-size", 2048);
 	nand->pages_per_block = fdt_read_uint32_default(fdt, node, "nand-page-count", 64);
 	nand->oob_size = fdt_read_uint32_default(fdt, node, "nand-oob-size", 0);
-	nand->size = nand->page_size * nand->pages_per_block * fdt_read_uint32_default(fdt, node, "nand-block-count", 256);
+	count = fdt_read_uint32_default(fdt, node, "nand-block-count", 256) / 1024;
+	nand->size = (nand->page_size / 1024) * nand->pages_per_block * count;
 	nand->offset = fdt_read_uint32_default(fdt, node, "nand-image-offset", 0);
 
-	INFO("NAND: Size %liMB, Page %i, pages per block %i, oob size %i, bit correct %i\n", (nand->size/1024)/1024, nand->page_size, 
+	INFO("NAND: Size %liMB, Page %i, pages per block %i, oob size %i, bit correct %i\n", nand->size, nand->page_size, 
 		nand->pages_per_block, nand->oob_size, nand->max_bit_corr);
 
 	switch (nand->page_size) {
@@ -564,6 +564,7 @@ static void ma35d1_nand_setup(struct ma35d1_nand_info *nand)
 	mmio_write_32(REG_NANDCTL, reg|PROT_3BEN|REDUN_AUTO_WEN);
 	mmio_write_32(REG_NANDRACTL, mmio_read_32(REG_NANDRACTL) & ~MECC_Msk);
 	mmio_write_32(REG_NANDRACTL, nand->oob_size);
+	ma35d1_nand_reset();
 }
 
 static size_t ma35d1_nand_read(int lba, uintptr_t buf, size_t size)
