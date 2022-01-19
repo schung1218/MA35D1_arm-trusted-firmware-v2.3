@@ -5,9 +5,9 @@
 #
 
 # Default cluster count for MA35D1
-MA35D1_CLUSTER_COUNT	:= 2
+MA35D1_CLUSTER_COUNT	:= 1
 # Default number of CPUs per cluster on MA35D1
-MA35D1_MAX_CPUS_PER_CLUSTER	:= 4
+MA35D1_MAX_CPUS_PER_CLUSTER	:= 2
 # Default number of threads per CPU on MA35D1
 MA35D1_MAX_PE_PER_CPU	:= 1
 
