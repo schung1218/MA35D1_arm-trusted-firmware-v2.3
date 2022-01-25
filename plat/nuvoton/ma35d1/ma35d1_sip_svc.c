@@ -13,8 +13,13 @@
 
 #include <ma35d1_sip_svc.h>
 #include <drivers/nuvoton/ma35d1_pmic.h>
+#include "ma35d1_private.h"
 
 #pragma weak ma35d1_plat_sip_handler
+#define CPU_1000MHZ   1
+#define CPU_700MHZ    2
+#define CPU_500MHZ    3
+
 uintptr_t ma35d1_plat_sip_handler(uint32_t smc_fid,
 				    u_register_t x1,
 				    u_register_t x2,
@@ -42,6 +47,8 @@ uintptr_t sip_smc_handler(uint32_t smc_fid,
 {
 	uint32_t ns;
 	uint32_t volt;
+	int rev;
+	int CPU_CLK = 0;
 
 	/* Determine which security state this SMC originated from */
 	ns = is_caller_non_secure(flags);
@@ -59,6 +66,18 @@ uintptr_t sip_smc_handler(uint32_t smc_fid,
 				ma35d1_set_pmic(x1,x2);
 		}
 		SMC_RET1(handle,volt);
+
+	case SIP_CPU_CLK:
+		if((uint32_t)x1 == CPU_1000MHZ)     CPU_CLK = CPU_PLL_1G;
+		else if((uint32_t)x1 == CPU_700MHZ) CPU_CLK = CPU_PLL_700;
+		else if((uint32_t)x1 == CPU_500MHZ) CPU_CLK = CPU_PLL_500;
+
+		rev = ma35d1_change_pll(CPU_CLK);
+		if(rev == 1){
+			WARN("Set CPU clock Fail !!\n");
+		}
+
+		SMC_RET1(handle, rev);
 
 	case SIP_SVC_VERSION:
 		/* Return the version of current implementation */
