@@ -16,21 +16,7 @@
 	};
 
 	ddr: ddr-controller {
-		compatible = "mt-ddr3-1gb";
-	};
-
-	memory {
-		device_type = "memory";
-		reg = <0x00000000 0x80000000 0 0x1e000000>;
+		compatible = "issi-ddr3-1gb";
 	};
 
 };
-
-&uart0 {
-	status = "okay";
-};
-
-
-
-
-

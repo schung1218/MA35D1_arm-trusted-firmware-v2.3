@@ -17,8 +17,9 @@
 
 #pragma weak ma35d1_plat_sip_handler
 #define CPU_1000MHZ   1
-#define CPU_700MHZ    2
-#define CPU_500MHZ    3
+#define CPU_800MHZ    2
+#define CPU_700MHZ    3
+#define CPU_500MHZ    4
 
 uintptr_t ma35d1_plat_sip_handler(uint32_t smc_fid,
 				    u_register_t x1,
@@ -59,21 +60,26 @@ uintptr_t sip_smc_handler(uint32_t smc_fid,
 	case SIP_SVC_PMIC:
 		/* Return the number of ma35d1 SiP Service Calls. */
 		volt = (uint32_t)x2;
-		if(volt==0)
+		if (volt == 0)
 			volt = ma35d1_get_pmic(x1);
-		else{
-			if(volt!=ma35d1_get_pmic(x1))
-				ma35d1_set_pmic(x1,x2);
+		else {
+			if (volt != ma35d1_get_pmic(x1))
+				ma35d1_set_pmic(x1, x2);
 		}
-		SMC_RET1(handle,volt);
+		SMC_RET1(handle, volt);
 
 	case SIP_CPU_CLK:
-		if((uint32_t)x1 == CPU_1000MHZ)     CPU_CLK = CPU_PLL_1G;
-		else if((uint32_t)x1 == CPU_700MHZ) CPU_CLK = CPU_PLL_700;
-		else if((uint32_t)x1 == CPU_500MHZ) CPU_CLK = CPU_PLL_500;
+		if ((uint32_t)x1 == CPU_1000MHZ)
+			CPU_CLK = CPU_PLL_1G;
+		else if ((uint32_t)x1 == CPU_800MHZ)
+			CPU_CLK = CPU_PLL_800;
+		else if ((uint32_t)x1 == CPU_700MHZ)
+			CPU_CLK = CPU_PLL_700;
+		else if ((uint32_t)x1 == CPU_500MHZ)
+			CPU_CLK = CPU_PLL_500;
 
 		rev = ma35d1_change_pll(CPU_CLK);
-		if(rev == 1){
+		if (rev == 1) {
 			WARN("Set CPU clock Fail !!\n");
 		}
 
