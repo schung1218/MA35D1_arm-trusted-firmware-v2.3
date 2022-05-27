@@ -38,7 +38,7 @@ static void init_tzc400(void)
 				MA35D1_DDR_BASE +
 				(MA35D1_DDR_MAX_SIZE - 1U),
 				TZC_REGION_S_NONE,
-				TZC_REGION_ACCESS_RDWR(MA35D1_NSAID_TZNS));
+				PLAT_ARM_TZC_NS_DEV_ACCESS);
 
 	/* Raise an exception if a NS device tries to access secure memory */
 	tzc400_set_action(TZC_ACTION_ERR);
@@ -54,7 +54,7 @@ static void init_tzc400(void)
 				MA35D1_DDR_BASE +
 				(MA35D1_DDR_MAX_SIZE - 1U),
 				TZC_REGION_S_NONE,
-				TZC_REGION_ACCESS_RDWR(MA35D1_NSAID_TZNS));
+				PLAT_ARM_TZC_NS_DEV_ACCESS);
 
 	/* Raise an exception if a NS device tries to access secure memory */
 	tzc400_set_action(TZC_ACTION_ERR);
@@ -92,8 +92,7 @@ static void init_tzc400(void)
 	tzc400_set_action(TZC_ACTION_ERR);
 	tzc400_enable_filters();
 #endif
-	outp32((void *)0x40460204, (inp32((void *)0x40460204) &
-			~0x7f7f0000) | reg);
+	outp32((void *)0x40460204, (inp32((void *)0x40460204) & ~0x7f7f0000) | reg);
 }
 
 
@@ -113,22 +112,19 @@ static void early_init_tzc400(void)
 
 	/* TZC2 */
 	tzc400_init(MA35D1_TZC2_BASE);
-	tzc400_configure_region0(TZC_REGION_S_RDWR,
-				TZC_REGION_ACCESS_RDWR(MA35D1_NSAID_TZNS));
+	tzc400_configure_region0(TZC_REGION_S_RDWR, PLAT_ARM_TZC_NS_DEV_ACCESS);
 
 	/* Raise an exception if a NS device tries to access secure memory */
 	tzc400_set_action(TZC_ACTION_ERR);
 
 	/* TZC0 */
 	tzc400_init(MA35D1_TZC0_BASE);
-	tzc400_configure_region0(TZC_REGION_S_RDWR,
-				TZC_REGION_ACCESS_RDWR(MA35D1_NSAID_TZNS));
+	tzc400_configure_region0(TZC_REGION_S_RDWR, PLAT_ARM_TZC_NS_DEV_ACCESS);
 
 	/* Raise an exception if a NS device tries to access secure memory */
 	tzc400_set_action(TZC_ACTION_ERR);
 
-	outp32((void *)0x40460204, (inp32((void *)0x40460204) &
-			~0x7f7f0000) | reg);
+	outp32((void *)0x40460204, (inp32((void *)0x40460204) & ~0x7f7f0000) | reg);
 }
 
 
