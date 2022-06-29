@@ -346,7 +346,7 @@ void plat_ma35d1_init(void)
 	outp32((void *)(SYS_BA+14), 0x70000);
 
 	/* Disable M4 Core reset*/
-	outp32((void *)(SYS_BA+20), inp32((void *)(SYS_BA+20)) & ~0x8);
+	outp32((void *)(SYS_BA+0x20), inp32((void *)(SYS_BA+0x20)) & ~0x8);
 
 	/* lock */
 	outp32((void *)SYS_RLKTZS, 0);
