@@ -93,6 +93,9 @@ static void init_tzc400(void)
 	tzc400_enable_filters();
 #endif
 	outp32((void *)0x40460204, (inp32((void *)0x40460204) & ~0x7f7f0000) | reg);
+
+	/* M4 access DDR enabled */
+	outp32((void *)0x40460070, inp32((void *)0x40460070) | 0x4);
 }
 
 
@@ -125,6 +128,9 @@ static void early_init_tzc400(void)
 	tzc400_set_action(TZC_ACTION_ERR);
 
 	outp32((void *)0x40460204, (inp32((void *)0x40460204) & ~0x7f7f0000) | reg);
+
+	/* M4 access DDR enabled */
+	outp32((void *)0x40460070, inp32((void *)0x40460070) | 0x4);
 }
 
 
