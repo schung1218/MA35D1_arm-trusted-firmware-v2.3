@@ -59,11 +59,59 @@ void bl2_el3_plat_arch_setup(void)
 	ma35d1_io_setup();
 }
 
+/*******************************************************************************
+ * Transfer SCP_BL2 from Trusted RAM using the SCP Download protocol.
+ * Return 0 on success, -1 otherwise.
+ ******************************************************************************/
+int plat_ma35d1_bl2_handle_scp_bl2(image_info_t *scp_bl2_image_info)
+{
+	if (scp_bl2_image_info->image_size > 0x80000) {	/* 512KB */
+		WARN("code size is large than 512KB\n");
+		return -1;
+	}
+
+	/* unlock */
+	outp32((void *)SYS_RLKTZS, 0x59);
+	outp32((void *)SYS_RLKTZS, 0x16);
+	outp32((void *)SYS_RLKTZS, 0x88);
+
+	/* Stop MCU - Enable M4 Core reset */
+	outp32((void *)(SYS_BA+0x20), inp32((void *)(SYS_BA+0x20)) | 0x8);
+
+	/* Load MCU binary into SRAM and DDR, depend on image size */
+	if (scp_bl2_image_info->image_size <= 0x20000) {	/* 128KB */
+		memcpy((void *)0x24000000, (void *)scp_bl2_image_info->image_base, scp_bl2_image_info->image_size);
+	}
+	else {
+		memcpy((void *)0x24000000, (void *)scp_bl2_image_info->image_base, 0x20000);
+		memcpy((void *)0x80020000, (void *)scp_bl2_image_info->image_base+0x20000, scp_bl2_image_info->image_size-0x20000);
+	}
+
+	/* Enable RTP clock */
+	outp32((void *)CLK_SYSCLK0, inp32((void *)CLK_SYSCLK0) | 0x2);
+
+	/* Let MCU running - Disable M4 Core reset */
+	outp32((void *)(SYS_BA+0x20), inp32((void *)(SYS_BA+0x20)) & ~0x8);
+
+	/* lock */
+	outp32((void *)SYS_RLKTZS, 0);
+
+	INFO("MCU running\n");
+
+	return 0;
+}
+
+/*******************************************************************************
+ * Gets SPSR for BL32 entry
+ ******************************************************************************/
 static uint32_t ma35d1_get_spsr_for_bl32_entry(void)
 {
 	return 0;
 }
 
+/*******************************************************************************
+ * Gets SPSR for BL33 entry
+ ******************************************************************************/
 static uint32_t ma35d1_get_spsr_for_bl33_entry(void)
 {
 	unsigned int mode;
@@ -128,6 +176,14 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
 		/* BL33 expects to receive the primary CPU MPID (through r0) */
 		bl_mem_params->ep_info.args.arg0 = 0xffff & read_mpidr();
 		bl_mem_params->ep_info.spsr = ma35d1_get_spsr_for_bl33_entry();
+		break;
+
+	case SCP_BL2_IMAGE_ID:
+		/* The subsequent handling of SCP_BL2 is platform specific */
+		err = plat_ma35d1_bl2_handle_scp_bl2(&bl_mem_params->image_info);
+		if (err) {
+			WARN("Failure in platform-specific handling of SCP_BL2 image.\n");
+		}
 		break;
 
 	default:

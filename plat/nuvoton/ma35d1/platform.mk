@@ -56,6 +56,10 @@ LOG_LEVEL		:= 40
 ENABLE_PSCI_STAT		:=	1
 ENABLE_PMF			:=	1
 
+ifeq ($(NEED_SCP_BL2),yes)
+$(eval $(call add_define,MA35D1_LOAD_SCP_BL2))
+endif
+
 ifeq ($(NEED_BL32),yes)
 $(eval $(call add_define,MA35D1_LOAD_BL32))
 endif

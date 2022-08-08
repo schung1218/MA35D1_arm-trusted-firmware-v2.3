@@ -76,6 +76,12 @@ Build Procedure
 		BL32_EXTRA1=fiptool_images/tee-pager_v2.bin BL33=fiptool_images/u-boot.bin \
 		all fip
 
+	CROSS_COMPILE=aarch64-linux-gnu- make PLAT=ma35d1 \
+		NEED_BL31=yes bl31 NEED_SCP_BL2=yes SCP_BL2=fiptool_images/cm4.bin \
+		NEED_BL32=yes BL32=fiptool_images/tee-header_v2.bin \
+		BL32_EXTRA1=fiptool_images/tee-pager_v2.bin BL33=fiptool_images/u-boot.bin \
+		all fip
+
 
    enable TRUSTED_BOARD_BOOT
 

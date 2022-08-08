@@ -342,10 +342,13 @@ void plat_ma35d1_init(void)
 		}
 	}
 
+	/* disable SSPCC/GPIO clock */
+	outp32((void *)CLK_SYSCLK1, inp32((void *)CLK_SYSCLK1) & ~0x3FFF0000);
+
 	/* enable WDT1/WDT2 reset */
 	outp32((void *)(SYS_BA+0x14), 0x70000);
 
-	/* Disable M4 Core reset*/
+	/* Disable M4 Core reset */
 	outp32((void *)(SYS_BA+0x20), inp32((void *)(SYS_BA+0x20)) & ~0x8);
 
 	/* lock */
