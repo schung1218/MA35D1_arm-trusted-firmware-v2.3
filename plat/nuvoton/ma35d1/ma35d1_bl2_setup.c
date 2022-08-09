@@ -86,17 +86,15 @@ int plat_ma35d1_bl2_handle_scp_bl2(image_info_t *scp_bl2_image_info)
 		memcpy((void *)0x24000000, (void *)scp_bl2_image_info->image_base, 0x20000);
 		memcpy((void *)0x80020000, (void *)scp_bl2_image_info->image_base+0x20000, scp_bl2_image_info->image_size-0x20000);
 	}
+	flush_dcache_range(0x24000000,scp_bl2_image_info->image_size);
 
 	/* Enable RTP clock */
 	outp32((void *)CLK_SYSCLK0, inp32((void *)CLK_SYSCLK0) | 0x2);
 
-	/* Let MCU running - Disable M4 Core reset */
-	outp32((void *)(SYS_BA+0x20), inp32((void *)(SYS_BA+0x20)) & ~0x8);
-
 	/* lock */
 	outp32((void *)SYS_RLKTZS, 0);
 
-	INFO("MCU running\n");
+	INFO("Load RTP M4\n");
 
 	return 0;
 }
