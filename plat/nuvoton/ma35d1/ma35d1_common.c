@@ -144,6 +144,17 @@ static void ma35d1_clock_setup(void)
 			INFO("CA-PLL is %d Hz\n", clock);
 			return;
 	};
+
+	/* DDR-PLL */
+	/* Set DDR-PLL control register0 */
+	outp32((void *)CLK_BA + 0x80,0x0F04102C);  //for DDRPLL is 266Mhz
+	/* Set DDR-PLL control register1 */
+	outp32((void *)CLK_BA + 0x84,0x6B851E40);
+	/* Set DDR-PLL control register2 */
+	outp32((void *)CLK_BA + 0x88,0x000048A3);
+	/* polling DDR-PLL stable */
+	while((inp32((void *)CLK_BA + 0x50) & 0x00000100) != 0x00000100);
+
 	/* set CA35 to E-PLL */
 	outp32((void *)CLK_CLKSEL0, (inp32((void *)CLK_CLKSEL0) & ~0x3) | 0x2);
 
