@@ -14,6 +14,7 @@
 #include <drivers/io/io_fip.h>
 #include <drivers/io/io_memmap.h>
 #include <lib/utils_def.h>
+#include <lib/mmio.h>
 
 #include <tools_share/firmware_image_package.h>
 
@@ -288,9 +289,9 @@ void ma35d1_io_setup(void)
 	unsigned int por;
 
 	/* check power-on-setting from OTP or PIN */
-	por = inp32(SYS_PWRONOTP);
+	por = mmio_read_32(SYS_PWRONOTP);
 	if ((por & 0x1) == 0) {    /* from pin */
-		por = inp32(SYS_PWRONPIN);
+		por = mmio_read_32(SYS_PWRONPIN);
 		por = por << 8;
 	}
 	printf("POR: 0x%x\n", por);
