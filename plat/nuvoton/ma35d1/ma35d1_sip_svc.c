@@ -34,6 +34,15 @@ static unsigned int CAPLL_MODE[7] = {
 static uint32_t eppl_div_restore = 0xFFFFFFFF;
 static uint32_t eppl_ctl1 = 0x1, vppl_ctl1 = 0x1;
 
+static __inline void ma35d1_UnlockReg(void)
+{
+	do {
+		mmio_write_32(0x404601A0, 0x59UL);
+		mmio_write_32(0x404601A0, 0x16UL);
+		mmio_write_32(0x404601A0, 0x88UL);
+	} while (mmio_read_32(0x404601A0) == 0UL);
+}
+
 uintptr_t ma35d1_plat_sip_handler(uint32_t smc_fid,
 				    u_register_t x1,
 				    u_register_t x2,
@@ -212,6 +221,13 @@ uintptr_t sip_smc_handler(uint32_t smc_fid,
 			mmio_write_32(CLK_PLL5CTL1, vppl_ctl1 | 0x70);
 		}
 		mmio_write_32(SYS_RLKTZS, 0);
+		SMC_RET1(handle, 0);
+
+	case SIP_CHIP_RESET:
+		ma35d1_UnlockReg();
+		mmio_write_32(SYS_IPRST0, 0x1);
+		mmio_write_32(SYS_IPRST0, 0x0);
+		WARN("SIP_CHIP_RESET not work!\n");
 		SMC_RET1(handle, 0);
 
 	case SIP_SVC_VERSION:
