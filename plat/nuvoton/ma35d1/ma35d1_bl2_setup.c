@@ -20,6 +20,9 @@
 #include <ma35d1_crypto.h>
 #include <tsi_cmd.h>
 
+#define SYS_BASE 0x40460000
+#define CA35WRBADR2 0x48
+
 #if FIP_DE_AES
 static __inline unsigned int Swap32(unsigned int val)
 {
@@ -248,6 +251,7 @@ void bl2_el3_plat_arch_setup(void)
  ******************************************************************************/
 int plat_ma35d1_bl2_handle_scp_bl2(image_info_t *scp_bl2_image_info)
 {
+
 	if (scp_bl2_image_info->image_size > 0x80000) {	/* 512KB */
 		WARN("code size is large than 512KB\n");
 		return -1;
@@ -262,22 +266,28 @@ int plat_ma35d1_bl2_handle_scp_bl2(image_info_t *scp_bl2_image_info)
 	mmio_write_32((SYS_BA+0x20), mmio_read_32((SYS_BA+0x20)) | 0x8);
 
 	/* Load MCU binary into SRAM and DDR, depend on image size */
-	if (scp_bl2_image_info->image_size <= 0x20000) {	/* 128KB */
-		memcpy((void*)0x24000000, (void*)scp_bl2_image_info->image_base, scp_bl2_image_info->image_size);
+	INFO("Load SCP_BL2\n");
+	if (SCPBL2_BASE==0x24000000)
+	{
+		if (scp_bl2_image_info->image_size <= 0x20000) {	/* 128KB */
+			memcpy((void*)0x24000000, (void*)scp_bl2_image_info->image_base, scp_bl2_image_info->image_size);
+		} else {
+			memcpy((void*)0x24000000, (void*)scp_bl2_image_info->image_base, 0x20000);
+			memcpy((void*)0x80020000, (void*)(scp_bl2_image_info->image_base+0x20000), \
+					scp_bl2_image_info->image_size-0x20000);
+		}
+		flush_dcache_range(0x24000000,scp_bl2_image_info->image_size);
+	} else {
+		memcpy((void*)SCPBL2_BASE, (void*)scp_bl2_image_info->image_base, scp_bl2_image_info->image_size);
+		flush_dcache_range(SCPBL2_BASE, scp_bl2_image_info->image_size);
+		mmio_write_32(SYS_BA+0x48, SCPBL2_BASE);
 	}
-	else {
-		memcpy((void*)0x24000000, (void*)scp_bl2_image_info->image_base, 0x20000);
-		memcpy((void*)0x80020000, (void*)(scp_bl2_image_info->image_base+0x20000), scp_bl2_image_info->image_size-0x20000);
-	}
-	flush_dcache_range(0x24000000,scp_bl2_image_info->image_size);
 
 	/* Enable RTP clock */
 	mmio_write_32(CLK_SYSCLK0, mmio_read_32(CLK_SYSCLK0) | 0x2);
 
 	/* lock */
 	mmio_write_32(SYS_RLKTZS, 0);
-
-	INFO("Load RTP M4\n");
 
 	return 0;
 }
