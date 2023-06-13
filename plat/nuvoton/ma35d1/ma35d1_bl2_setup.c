@@ -99,7 +99,7 @@ int ma35d1_fip_verify(uintptr_t base, size_t size) {
 	} else { /* crypto */
 
 		/* initial crypto engine and ks clock */
-                mmio_write_32(TSI_CLK_BASE+0x04),
+                mmio_write_32((TSI_CLK_BASE+0x04),
                             (mmio_read_32(TSI_CLK_BASE+0x04) | 0x5000));
 
                 /* Init KeyStore */
