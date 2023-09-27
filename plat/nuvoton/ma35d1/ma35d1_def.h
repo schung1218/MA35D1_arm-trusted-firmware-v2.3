@@ -38,8 +38,8 @@
 /*******************************************************************************
  * MA35D1 memory map related constants
  ******************************************************************************/
-//#define MA35D1_ROM_BASE              U(0x5FFC0000)
-//#define MA35D1_ROM_SIZE              U(0x00020000)
+//#define MA35D1_ROM_BASE		U(0x5FFC0000)
+//#define MA35D1_ROM_SIZE		U(0x00020000)
 
 #define MA35D1_SRAM0_BASE		U(0x24000000)
 #define MA35D1_SRAM0_SIZE		U(0x00020000)
@@ -48,13 +48,13 @@
 #define MA35D1_SRAM1_SIZE		U(0x00040000)
 
 /* DDR configuration */
-#define MA35D1_DDR_BASE		U(0x80000000)
+#define MA35D1_DDR_BASE			U(0x80000000)
 
-#define MA35D1_BL2_BASE		U(0x28000000)
-#define MA35D1_BL2_SIZE		U(0x00023000)
+#define MA35D1_BL2_BASE			U(0x28000000)
+#define MA35D1_BL2_SIZE			U(0x00023000)
 
-#define MA35D1_DTB_BASE		U(0x28023000)
-#define MA35D1_DTB_SIZE		U(0x00002000)
+#define MA35D1_DTB_BASE			U(0x28023000)
+#define MA35D1_DTB_SIZE			U(0x00002000)
 
 #define MA35D1_BL31_BASE		U(0x28025000)
 #define MA35D1_BL31_SIZE		U(0x0001A000)	/* 0x2803C000 is reserved to IBR */
@@ -74,8 +74,8 @@
 #define SCP_BL2_SIZE			U(0x00080000)	/* 512KB */
 #define SCPBL2_BASE			MA35D1_SCPBL2_BASE
 
-#define MA35D1_FIP_SIZE		0x00200000
-#define MA35D1_FIP_BASE		U(0x86000000)	//(MA35D1_DDR_BASE)
+#define MA35D1_FIP_SIZE			0x00200000
+#define MA35D1_FIP_BASE			U(0x86000000)	//(MA35D1_DDR_BASE)
 #define MA35D1_FIP_LIMIT		(MA35D1_FIP_BASE + MA35D1_FIP_SIZE)
 
 /*
@@ -238,6 +238,10 @@
 #define CRYPTO_BASE	U(0x40300000)
 #define TSI_SYS_BASE	U(0x40360000)
 #define TSI_CLK_BASE	U(0x40360200)
+#define TSI_CLK_AHBCLK	(TSI_CLK_BASE + 0x4)
+#define TSI_CLK_APBCLK1	(TSI_CLK_BASE + 0xc)
+#define TSI_CLK_CLKSEL0	(TSI_CLK_BASE + 0x10)
+#define TSI_CLK_PLLCTL	(TSI_CLK_BASE + 0x40)
 #define TSI_PARAM_BASE	U(0x2803EE00) /* 0xA00 */
 #define KS_BASE		U(0x40340000)
 #define WHC0_BASE	U(0x403A0000)
