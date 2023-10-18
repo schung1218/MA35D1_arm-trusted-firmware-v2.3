@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2023 Nuvoton Technology Corp. All rights reserved.
  *
- * SPDX-License-Identifier:	BSD-3-Clause
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef	MA35H0_DEF_H
@@ -21,63 +21,63 @@
 #define	MA35H0_MAX_PE_PER_CPU	1
 #endif
 
-#define	MA35H0_PRIMARY_CPU		0x0
+#define	MA35H0_PRIMARY_CPU	0x0
 
 /* Defines for the Interconnect	build selection	*/
-#define	MA35H0_CCI			1
-#define	MA35H0_CCN			2
+#define	MA35H0_CCI		1
+#define	MA35H0_CCN		2
 
-#define	MAX_IO_DEVICES			U(2)
-#define	MAX_IO_HANDLES			U(2)
+#define	MAX_IO_DEVICES		U(2)
+#define	MAX_IO_HANDLES		U(2)
 #define	MAX_IO_BLOCK_DEVICES	U(1)
 
 /*******************************************************************************
  * MA35H0 memory map related constants
  ******************************************************************************/
-#define	MA35H0_SRAM1_BASE		U(0x28000000)
-#define	MA35H0_SRAM1_SIZE		U(0x00040000)
+#define	MA35H0_SRAM1_BASE	U(0x28000000)
+#define	MA35H0_SRAM1_SIZE	U(0x00040000)
 
 /* DDR configuration */
-#define	MA35H0_DDR_BASE			U(0x80000000)
+#define	MA35H0_DDR_BASE		U(0x80000000)
 
-#define	MA35H0_BL2_BASE			U(0x28000000)
-#define	MA35H0_BL2_SIZE			U(0x00023000)
+#define	MA35H0_BL2_BASE		U(0x28000000)
+#define	MA35H0_BL2_SIZE		U(0x00023000)
 
-#define	MA35H0_DTB_BASE			U(0x28023000)
-#define	MA35H0_DTB_SIZE			U(0x00002000)
+#define	MA35H0_DTB_BASE		U(0x28023000)
+#define	MA35H0_DTB_SIZE		U(0x00002000)
 
-#define	MA35H0_BL31_BASE		U(0x28025000)
-#define	MA35H0_BL31_SIZE		U(0x0001A000)	/* 0x2803C000 is reserved to IBR */
+#define	MA35H0_BL31_BASE	U(0x28025000)
+#define	MA35H0_BL31_SIZE	U(0x0001A000)	/* 0x2803C000 is reserved to IBR */
 
-#define	MA35H0_BL32_SIZE		U(0x00200000)
+#define	MA35H0_BL32_SIZE	U(0x00200000)
 
-#define	MA35H0_BL33_BASE		U(0x85500000)
-#define	MA35H0_BL33_SIZE		U(0x00200000)
+#define	MA35H0_BL33_BASE	U(0x85500000)
+#define	MA35H0_BL33_SIZE	U(0x00200000)
 
-#define	BL2_BASE			MA35H0_BL2_BASE
-#define	BL2_LIMIT			(MA35H0_BL2_BASE + MA35H0_BL2_SIZE)
+#define	BL2_BASE		MA35H0_BL2_BASE
+#define	BL2_LIMIT		(MA35H0_BL2_BASE + MA35H0_BL2_SIZE)
 
-#define	DTB_BASE			MA35H0_DTB_BASE
-#define	DTB_LIMIT			(MA35H0_DTB_BASE + MA35H0_DTB_SIZE)
+#define	DTB_BASE		MA35H0_DTB_BASE
+#define	DTB_LIMIT		(MA35H0_DTB_BASE + MA35H0_DTB_SIZE)
 
 #define	MA35H0_FIP_SIZE		0x00200000
 #define	MA35H0_FIP_BASE		U(0x86000000)	//(MA35H0_DDR_BASE)
 #define	MA35H0_FIP_LIMIT	(MA35H0_FIP_BASE + MA35H0_FIP_SIZE)
 
 /*
- * Put BL31	at the bottom of TZC secured DRAM
+ * Put BL31 at the bottom of TZC secured DRAM
  */
-#define	BL31_BASE			MA35H0_BL31_BASE
-#define	BL31_LIMIT			(MA35H0_BL31_BASE +	MA35H0_BL31_SIZE)
+#define	BL31_BASE		MA35H0_BL31_BASE
+#define	BL31_LIMIT		(MA35H0_BL31_BASE + MA35H0_BL31_SIZE)
 
-#define	BL32_BASE			MA35H0_BL32_BASE
-#define	BL32_LIMIT			(MA35H0_BL32_BASE +	MA35H0_BL32_SIZE)
+#define	BL32_BASE		MA35H0_BL32_BASE
+#define	BL32_LIMIT		(MA35H0_BL32_BASE + MA35H0_BL32_SIZE)
 
-#define	BL33_BASE			MA35H0_BL33_BASE
-#define	BL33_LIMIT			(MA35H0_BL33_BASE +	MA35H0_BL33_SIZE)
+#define	BL33_BASE		MA35H0_BL33_BASE
+#define	BL33_LIMIT		(MA35H0_BL33_BASE + MA35H0_BL33_SIZE)
 
 /*******************************************************************************
- * ma35d1 device/io	map	related	constants (used	for	MMU)
+ * ma35d1 device/io map related	constants (used	for MMU)
  ******************************************************************************/
 #define	MA35H0_REG_BASE		U(0x40000000)
 #define	MA35H0_REG_SIZE		U(0x20000000)
@@ -86,7 +86,7 @@
 #define	MA35H0_DRAM_S_SIZE	U(0x00800000)
 
 /* MA35H0 Power	controller base	address*/
-#define	PWRC_BASE			UL(0x1c100000)
+#define	PWRC_BASE		UL(0x1c100000)
 
 /*******************************************************************************
  * GIC-400 & interrupt handling	related	constants
@@ -98,7 +98,7 @@
 #define	BASE_GICH_BASE			UL(0x50804000)
 #define	BASE_GICV_BASE			UL(0x50806000)
 
-#define	MA35H0_IRQ_TZ_WDOG			39	/* wdt0	*/
+#define	MA35H0_IRQ_TZ_WDOG		39	/* wdt0	*/
 #define	MA35H0_IRQ_SEC_SYS_TIMER	79	/* tmr0? */
 
 /*******************************************************************************
@@ -109,7 +109,7 @@
 #define	MA35H0_TZC2_BASE		U(0x404E3000)
 
 /* NSAIDs used by devices in TZC filter	0 on MA35H0	*/
-#define	MA35H0_NSAID_TZNS		U(0)
+#define	MA35H0_NSAID_TZNS	U(0)
 
 #define	MA35H0_FILTER_BIT_ALL	U(7)
 
@@ -117,9 +117,9 @@
  * Memprotect definitions
  ******************************************************************************/
 /* PSCI	memory protect definitions:
- * This	variable is	stored in a	non-secure flash because some ARM reference
- * platforms do	not	have secure	NVRAM. Real	systems	that provided MEM_PROTECT
- * support must	use	a secure NVRAM to store	the	PSCI MEM_PROTECT definitions.
+ * This	variable is stored in a non-secure flash because some ARM reference
+ * platforms do	not have secure NVRAM. Real systems that provided MEM_PROTECT
+ * support must	use a secure NVRAM to store the PSCI MEM_PROTECT definitions.
  */
 /*#define PLAT_ARM_MEM_PROT_ADDR	(V2M_FLASH0_BASE + V2M_FLASH0_SIZE \
  *					 - V2M_FLASH_BLOCK_SIZE)

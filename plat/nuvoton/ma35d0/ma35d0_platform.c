@@ -23,16 +23,28 @@ int32_t plat_get_soc_revision(void)
 	return (int32_t)(mmio_read_32(SYS_BA));
 }
 
+/* CPU-PLL */
+static unsigned int CAPLL_MODE[2] = {
+	0x000006a2,	/* 648 MHz */
+	0x0000137D,	/* 500 MHz */
+};
+
 /*
  * This function changes the CPU PLL
  */
 int32_t ma35d0_change_pll(int pll)
 {
 	uint64_t timeout;
+	uint32_t index = 1; /* 500 MHz */
 
 	/* CA-PLL */
 	switch (pll) {
+	case CPU_PLL_650:
+		index = 0;
+		INFO("CA-PLL is 650 MHz\n");
+		break;
 	case CPU_PLL_500:
+		index = 1;
 		INFO("CA-PLL is 500 MHz\n");
 		break;
 	default:
@@ -42,7 +54,7 @@ int32_t ma35d0_change_pll(int pll)
 	/* set CA35 to E-PLL */
 	mmio_write_32(CLK_CLKSEL0, (mmio_read_32(CLK_CLKSEL0) & ~0x3) | 0x2);
 
-	mmio_write_32(CLK_PLL0CTL0, 0x0000137D); /* 500 MHz */
+	mmio_write_32(CLK_PLL0CTL0, CAPLL_MODE[index]);
 
 	timeout = timeout_init_us(12000);	/* 1ms */
 	/* check PLL stable */

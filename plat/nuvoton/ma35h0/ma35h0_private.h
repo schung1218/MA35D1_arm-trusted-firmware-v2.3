@@ -31,6 +31,7 @@
 #define PWRON_SPI_NOR       (0x00008000)
 
 /* PLL Setting */
+#define CPU_PLL_650         (0x00000650)
 #define CPU_PLL_600         (0x00000600)
 #define CPU_PLL_500         (0x00000500)
 #define CPU_PLL_250         (0x00000250)

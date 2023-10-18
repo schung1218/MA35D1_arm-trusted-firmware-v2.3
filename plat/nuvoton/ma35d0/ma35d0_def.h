@@ -1,35 +1,35 @@
 /*
  * Copyright (C) 2023 Nuvoton Technology Corp. All rights reserved.
  *
- * SPDX-License-Identifier:	BSD-3-Clause
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef	MA35D0_DEF_H
-#define	MA35D0_DEF_H
+#ifndef MA35D0_DEF_H
+#define MA35D0_DEF_H
 
 #include <lib/utils_def.h>
 
-#ifndef	MA35D0_CLUSTER_COUNT
-#define	MA35D0_CLUSTER_COUNT		1
+#ifndef MA35D0_CLUSTER_COUNT
+#define MA35D0_CLUSTER_COUNT		1
 #endif
 
-#ifndef	MA35D0_MAX_CPUS_PER_CLUSTER
-#define	MA35D0_MAX_CPUS_PER_CLUSTER	2
+#ifndef MA35D0_MAX_CPUS_PER_CLUSTER
+#define MA35D0_MAX_CPUS_PER_CLUSTER	2
 #endif
 
-#ifndef	MA35D0_MAX_PE_PER_CPU
-#define	MA35D0_MAX_PE_PER_CPU	1
+#ifndef MA35D0_MAX_PE_PER_CPU
+#define MA35D0_MAX_PE_PER_CPU		1
 #endif
 
-#define	MA35D0_PRIMARY_CPU		0x0
+#define MA35D0_PRIMARY_CPU		0x0
 
-/* Defines for the Interconnect	build selection	*/
-#define	MA35D0_CCI			1
-#define	MA35D0_CCN			2
+/* Defines for the Interconnect build selection */
+#define MA35D0_CCI			1
+#define MA35D0_CCN			2
 
-#define	MAX_IO_DEVICES			U(2)
-#define	MAX_IO_HANDLES			U(2)
-#define	MAX_IO_BLOCK_DEVICES	U(1)
+#define MAX_IO_DEVICES			U(2)
+#define MAX_IO_HANDLES			U(2)
+#define MAX_IO_BLOCK_DEVICES	U(1)
 
 /*******************************************************************************
  * MA35D0 memory map related constants
